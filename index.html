@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Ethics Compliance Checker</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>AI Ethics Compliance Checker</h1>
+        <p>Ensure your AI models meet ethical standards with our comprehensive compliance checks.</p>
+        <button id="get-started">Get Started</button>
+    </header>
+
+    <main>
+        <form id="upload-form">
+            <div class="form-group">
+                <label for="model-name">Model Name:</label>
+                <input type="text" id="model-name" name="model_name" required>
+            </div>
+            <div class="form-group">
+                <label for="model-description">Description:</label>
+                <textarea id="model-description" name="model_description" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="model-file">Upload AI Model File (.pkl or .onnx):</label>
+                <input type="file" id="model-file" name="model_file" accept=".pkl,.onnx" required>
+            </div>
+            <div class="form-group">
+                <label for="dataset-file">Upload Dataset File (.csv or .json):</label>
+                <input type="file" id="dataset-file" name="dataset_file" accept=".csv,.json" required>
+            </div>
+            <div class="form-group">
+                <label>Checks:</label>
+                <div>
+                    <input type="checkbox" id="bias-check" value="Bias Check">
+                    <label for="bias-check">Bias Check</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="transparency-audit" value="Transparency Audit">
+                    <label for="transparency-audit">Transparency Audit</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="privacy-scan" value="Privacy Scan">
+                    <label for="privacy-scan">Privacy Scan</label>
+                </div>
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+
+        <div id="loader" class="loader" style="display: none;">Checking...</div>
+
+        <div id="results" style="display: none;">
+            <h2>Compliance Score</h2>
+            <div id="score-bar" class="progress-bar">
+                <div id="score-fill" class="progress-fill"></div>
+            </div>
+            <div id="risk-report" class="card">
+                <h3>Risk Report</h3>
+                <p id="risk-details"></p>
+            </div>
+            <h3>Improvement Suggestions</h3>
+            <ul id="improvement-suggestions"></ul>
+        </div>
+    </main>
+
+    <!-- JS script connected at the end of body -->
+    <script src="script.js"></script>
+</body>
+</html>
