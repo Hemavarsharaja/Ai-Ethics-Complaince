@@ -2,70 +2,53 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Ethics Compliance Checker</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
+    <!-- Homepage Section -->
+    <section id="homepage">
         <h1>AI Ethics Compliance Checker</h1>
-        <p>Ensure your AI models meet ethical standards with our comprehensive compliance checks.</p>
-        <button id="get-started">Get Started</button>
-    </header>
+        <p>Ensure ethical standards in your AI models</p>
+        <button id="next-btn">Go to Compliance Form</button>
+    </section>
 
-    <main>
-        <form id="upload-form">
-            <div class="form-group">
-                <label for="model-name">Model Name:</label>
-                <input type="text" id="model-name" name="model_name" required>
-            </div>
-            <div class="form-group">
-                <label for="model-description">Description:</label>
-                <textarea id="model-description" name="model_description" required></textarea>
-            </div>
-            <div class="form-group">
-                <label for="model-file">Upload AI Model File (.pkl or .onnx):</label>
-                <input type="file" id="model-file" name="model_file" accept=".pkl,.onnx" required>
-            </div>
-            <div class="form-group">
-                <label for="dataset-file">Upload Dataset File (.csv or .json):</label>
-                <input type="file" id="dataset-file" name="dataset_file" accept=".csv,.json" required>
-            </div>
-            <div class="form-group">
-                <label>Checks:</label>
-                <div>
-                    <input type="checkbox" id="bias-check" value="Bias Check">
-                    <label for="bias-check">Bias Check</label>
-                </div>
-                <div>
-                    <input type="checkbox" id="transparency-audit" value="Transparency Audit">
-                    <label for="transparency-audit">Transparency Audit</label>
-                </div>
-                <div>
-                    <input type="checkbox" id="privacy-scan" value="Privacy Scan">
-                    <label for="privacy-scan">Privacy Scan</label>
-                </div>
-            </div>
+    <!-- Form Page Section -->
+    <section id="formpage" style="display: none;">
+        <form id="upload-form" enctype="multipart/form-data">
+            <h2>Model Information</h2>
+            <input type="text" name="model_name" placeholder="Model Name" required><br>
+            <textarea name="model_description" placeholder="Model Description" required></textarea><br>
+
+            <h2>Upload Files</h2>
+            <label>Model File (.pkl or .onnx):</label><br>
+            <input type="file" name="model_file" accept=".pkl,.onnx" required><br><br>
+            <label>Dataset File (.csv or .json):</label><br>
+            <input type="file" name="dataset_file" accept=".csv,.json" required><br><br>
+
+            <h2>Select Checks</h2>
+            <label><input type="checkbox" name="checks" value="Bias Check"> Bias Check</label><br>
+            <label><input type="checkbox" name="checks" value="Transparency Audit"> Transparency Audit</label><br>
+            <label><input type="checkbox" name="checks" value="Privacy Scan"> Privacy Scan</label><br>
+            <label><input type="checkbox" name="checks" value="Fairness Metrics Check"> Fairness Metrics Check</label><br>
+            <label><input type="checkbox" name="checks" value="Representativeness Check"> Representativeness Check</label><br>
+            <label><input type="checkbox" name="checks" value="Robustness Check"> Robustness Check</label><br><br>
+
             <button type="submit">Submit</button>
         </form>
 
-        <div id="loader" class="loader" style="display: none;">Checking...</div>
+        <!-- Loader -->
+        <div id="loader" style="display: none;">Checking compliance, please wait...</div>
 
+        <!-- Results -->
         <div id="results" style="display: none;">
-            <h2>Compliance Score</h2>
-            <div id="score-bar" class="progress-bar">
-                <div id="score-fill" class="progress-fill"></div>
-            </div>
-            <div id="risk-report" class="card">
-                <h3>Risk Report</h3>
-                <p id="risk-details"></p>
-            </div>
+            <h2>Compliance Score: <span id="score"></span>%</h2>
+            <p>Risk Level: <strong id="risk"></strong></p>
             <h3>Improvement Suggestions</h3>
-            <ul id="improvement-suggestions"></ul>
+            <ul id="suggestions-list"></ul>
         </div>
-    </main>
+    </section>
 
-    <!-- JS script connected at the end of body -->
     <script src="script.js"></script>
 </body>
 </html>
