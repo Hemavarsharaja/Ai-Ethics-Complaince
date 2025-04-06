@@ -4,32 +4,31 @@ from fastapi.responses import JSONResponse
 import pandas as pd
 import joblib
 import json
-import shap
 import numpy as np
-
-from fairlearn.metrics import MetricFrame, equalized_odds_difference
+import shap
+from fairlearn.metrics import MetricFrame, selection_rate, equalized_odds_difference
 from sklearn.metrics import accuracy_score
 
 app = FastAPI()
 
-# Enable CORS for frontend-backend communication
+# Allow frontend to communicate with FastAPI (CORS setup)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Change to frontend domain in production
+    allow_origins=["*"],  # Allow all for development; restrict this in production
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Load dataset based on file extension
-def load_dataset(file: UploadFile) -> pd.DataFrame:
+# Load dataset
+def load_dataset(file: UploadFile):
     if file.filename.endswith(".csv"):
         return pd.read_csv(file.file)
     elif file.filename.endswith(".json"):
         return pd.read_json(file.file)
     raise ValueError("Unsupported dataset format.")
 
-# Load model file
+# Load model
 def load_model(file: UploadFile):
     if file.filename.endswith(".pkl"):
         return joblib.load(file.file)
@@ -87,7 +86,7 @@ async def analyze_model(
         if "Privacy Scan" in checks:
             if any("id" in col.lower() or "name" in col.lower() for col in X.columns):
                 score -= 10
-                risks.append("Dataset may contain PII.")
+                risks.append("Dataset may contain PII (Personally Identifiable Information).")
                 suggestions.append("Remove or anonymize personally identifiable data.")
 
         # Fairness Metrics Check
@@ -98,6 +97,8 @@ async def analyze_model(
                     score -= 15
                     risks.append("Unequal treatment across groups.")
                     suggestions.append("Balance accuracy across demographic subgroups.")
+            else:
+                suggestions.append("Include sensitive attribute columns (e.g., gender) for fairness analysis.")
 
         # Representativeness Check
         if "Representativeness Check" in checks:
@@ -124,10 +125,10 @@ async def analyze_model(
                     risks.append("Model is not robust to small input variations.")
                     suggestions.append("Test model with adversarial or noisy input data.")
             except Exception:
-                suggestions.append("Robustness testing failed. Ensure model handles noise.")
+                suggestions.append("Robustness testing failed. Ensure model handles noisy inputs.")
 
-        # Clamp score between 0 and 100
-        score = max(0, min(100, score))
+        # Final score adjustment
+        score = max(0, min(100, score))  # Clamp between 0 and 100
         risk_level = (
             "High" if score < 40 else
             "Medium" if score < 70 else
